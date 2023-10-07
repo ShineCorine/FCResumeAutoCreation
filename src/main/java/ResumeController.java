@@ -3,7 +3,16 @@ public class ResumeController {
 
 		Resume resume = new Resume();
 		createResume(resume);
+
 		System.out.println(resume.getPersonInfo().toString());
+		//Todo 이력서정보를 엑셀 시트에 입력하는 작업
+
+
+		// Todo 자기소개서를 시트에 입력하는 작업
+
+		// 엑셀 파일로 저장하기
+
+
 
 	}
 	public static void createResume(Resume resume){
