@@ -1,5 +1,7 @@
-import com.itextpdf.commons.utils.JsonUtil;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,22 +12,28 @@ public class ResumeView {
 	public PersonInfo inputPersonInfo(){
 		PersonInfo personInfo = new PersonInfo();
 
-		System.out.println("개인 정보를 입력해주세요");
-		System.out.print("사진: ");
-		personInfo.setPhoto(scanner.nextLine());
+		System.out.println("====== 개인 정보를 입력해주세요===== \n");
+
+		personInfo.setPhoto(inputFileSrc());
+
 		System.out.print("이름: ");
 		personInfo.setName(scanner.nextLine());
-		System.out.print("email: ");
-		personInfo.setEmail(scanner.nextLine());
+
+		personInfo.setEmail(inputEmail());
+
 		System.out.print("주소: ");
 		personInfo.setAddress(scanner.nextLine());
-		System.out.print("휴대폰: ");
-		personInfo.setPhoneNumber(scanner.nextLine());
-		System.out.print("생년월일(YYYY-mm-dd): ");
-		personInfo.setBirthDate(scanner.nextLine());
+
+		// 휴대폰 번호 입력 및 검사
+		personInfo.setPhoneNumber(inputPhoneNumber());
+
+		// 생일 입력
+		personInfo.setBirthDate(inputBirthDate());
 
 		return personInfo;
 	}
+
+
 	public List<Education> inputEducation(){
 		List<Education> eduList = new ArrayList<>();
 
@@ -102,10 +110,10 @@ public class ResumeView {
 	}
 
 	private String inputGraduationStatus(){
-		String answer;
 		String[] choices = {"졸업", "졸업 예정", "중퇴", "수료"};
+
 		while(true) {
-			System.out.println("졸업 상태를 입력해주세요[1-4]");
+			System.out.println("졸업 상태를 선택해주세요[1-4]");
 			System.out.println("[1]졸업 [2]졸업 예정 [3]중퇴 [4]수료");
 			int input = scanner.nextInt();
 			scanner.nextLine(); // 버퍼 비우기.
@@ -118,7 +126,7 @@ public class ResumeView {
 	}
 
 	private String inputEmail(){
-		final String pattern = "\\w+@\\w+\\.\\w+(\\.\\w+)?";
+		final String pattern = "^\\w+@\\w+\\.\\w+(\\.\\w+)?$";
 
 		while(true){
 			System.out.print("이메일을 입력하세요: ");
@@ -128,6 +136,43 @@ public class ResumeView {
 			}
 
 			System.out.println("올바른 이메일이 아닙니다.");
+		}
+	}
+
+	private String inputBirthDate() {
+		String pattern = "^\\d{4}-\\d{2}-\\d{2}$|^\\d{8}";
+		String phoneNumber;
+		while(true){
+			System.out.print("생년월일 8자리(YYYY-mm-dd): ");
+			phoneNumber = scanner.nextLine();
+			if(Pattern.matches(pattern, phoneNumber)){
+				return phoneNumber;
+			}
+			System.out.println(phoneNumber+"은 올바른 입력이 아닙니다. 다시 입력해주세요.");
+		}
+	}
+
+	private String inputPhoneNumber() {
+		String pattern = "^010-\\d{4}-\\d{4}$|\\d{11}";
+		while (true){
+			System.out.print("휴대폰: ");
+			String string = scanner.nextLine();
+			if(Pattern.matches(pattern, string)){
+				return string;
+			}
+			System.out.println(string+"은 올바른 번호가 아닌 거 같습니다. 다시 입력해주세요\n");
+		}
+	}
+
+	private String inputFileSrc() {
+		while(true){
+			System.out.print("사진 파일 경로: ");
+			String fileName = scanner.nextLine();
+			Path path = Paths.get(fileName);
+			if(Files.exists(path)){
+				return fileName;
+			}
+			System.out.println("파일이 존재하지 않습니다. 다시 입력해주세요.");
 		}
 	}
 }
