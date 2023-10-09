@@ -1,8 +1,8 @@
 public class Career {
-	String workPeriod;
-	String companyName;
-	String jobTitle;
-	String employmentYears;
+	private String workPeriod;
+	private String companyName;
+	private String jobTitle;
+	private String employmentYears;
 
 	public Career() {
 	}

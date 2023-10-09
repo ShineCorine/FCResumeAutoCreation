@@ -1,6 +1,8 @@
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
@@ -12,16 +14,13 @@ public class ResumeController {
 		Resume resume = new Resume();
 		createResume(resume);
 
-		System.out.println(resume.getPersonInfo().toString());
+		System.out.println(resume.getSelfIntroduction());
 		Workbook wb = new XSSFWorkbook();
 
-
 		createResumeSheet(wb, resume);
-
-		// Todo 자기소개서를 시트에 입력하는 작업
-
-
-
+		//자기소개서를 시트에 입력
+		createSelfIntrudoctionSheet(wb, resume.getSelfIntroduction());
+		// 파일 출력
 		try (OutputStream fileOut = new FileOutputStream("이력서.xlsx")) {
 			wb.write(fileOut);
 		}catch (Exception e){
@@ -29,6 +28,21 @@ public class ResumeController {
 		}
 
 	}
+
+	private static void createSelfIntrudoctionSheet(Workbook wb, String selfIntroduction) {
+		XSSFCellStyle cs = (XSSFCellStyle) wb.createCellStyle();
+		// 여러 줄 표시
+		cs.setWrapText(true);
+		Sheet selfIntroductionSheet = wb.createSheet("자기소개");
+		// 셀 생성
+		Cell cell = selfIntroductionSheet.createRow(0).createCell(0);
+		//셀 스타일 적용
+		cell.setCellStyle(cs);
+		cell.setCellValue(new XSSFRichTextString(selfIntroduction));
+		//너비 자동 조정
+		selfIntroductionSheet.autoSizeColumn(0);
+	}
+
 	private static void createResume(Resume resume){
 		ResumeView resumeView = new ResumeView();
 		System.out.println("이력서 정보를 입력을 시작합니다..");

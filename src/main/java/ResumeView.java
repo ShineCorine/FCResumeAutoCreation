@@ -103,7 +103,7 @@ public class ResumeView {
 			if (newLine.isEmpty()){
 				break;
 			}
-			selfIntroduction.append(newLine);
+			selfIntroduction.append(newLine).append("\n");
 		}
 
 		return selfIntroduction.toString();
